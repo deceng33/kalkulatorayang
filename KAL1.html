@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Matematika</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fce4ec; /* Warna latar belakang cerah pink */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      box-sizing: border-box;
+      overflow-y: auto; /* Membuat halaman bisa scroll vertikal */
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px; /* Lebar maksimum */
+      overflow-y: auto; /* Scrollable jika konten meluap */
+      height: 100%; /* Agar konten bisa scroll */
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #d81b60; /* Warna pink gelap untuk judul */
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #880e4f; /* Warna pink lebih gelap untuk subjudul */
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    /* Styling input fields and buttons */
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #f06292; /* Warna pink muda untuk border */
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+      text-align: right;
+    }
+
+    button {
+      background-color: #d81b60; /* Warna pink cerah untuk tombol */
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 8px 0;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 22%;
+    }
+
+    button:hover {
+      background-color: #c2185b; /* Warna pink lebih gelap untuk hover */
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .col-3 {
+      flex: 1 1 22%;
+    }
+
+    /* Centering and result styling */
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      color: #880e4f; /* Warna pink gelap untuk hasil */
+      margin-top: 10px;
+    }
+
+    #calculationDescription {
+      font-size: 14px;
+      color: #555;
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #777;
+    }
+
+    /* Responsiveness for smaller screens (mobile) */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 26px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      button {
+        width: 48%; /* Membuat tombol lebih besar pada mobile */
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .col-3 {
+        width: 100%; /* Membuat kolom 100% pada perangkat mobile */
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      #result {
+        font-size: 20px;
+      }
+
+      #calculationDescription {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Kalkulator Matematika</h1>
+      <p>Gunakan kalkulator ini untuk menghitung operasi dasar matematika, geometri, dan sains.</p>
+    </header>
+
+    <div class="calculator">
+      <h2>Operasi Dasar</h2>
+      <input type="text" id="display" readonly placeholder="0">
+
+      <div class="row">
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="appendOperator('+')">+</button>
+      </div>
+      <div class="row">
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="appendOperator('-')">-</button>
+      </div>
+      <div class="row">
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="appendOperator('*')">*</button>
+      </div>
+      <div class="row">
+        <button onclick="appendNumber('0')">0</button>
+        <button onclick="appendDot()">.</button>
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="appendOperator('/')">/</button>
+      </div>
+      <div class="row">
+        <button onclick="calculate()">=</button>
+      </div>
+
+      <p id="result">Hasil: </p>
+      <p id="calculationDescription"></p> <!-- Deskripsi cara perhitungan -->
+
+      <h2>Fitur Geometri</h2>
+      <div class="row">
+        <div class="col-3">
+          <input type="number" id="length" placeholder="Panjang">
+        </div>
+        <div class="col-3">
+          <input type="number" id="width" placeholder="Lebar">
+        </div>
+      </div>
+
+      <button onclick="calculateArea()">Luas Persegi Panjang</button>
+      <input type="number" id="radius" placeholder="Jari-jari Lingkaran">
+      <button onclick="calculateCircleArea()">Luas Lingkaran</button>
+
+      <h2>Volume</h2>
+      <div class="row">
+        <div class="col-3">
+          <input type="number" id="cubeSide" placeholder="Sisi Kubus">
+        </div>
+        <div class="col-3">
+          <input type="number" id="sphereRadius" placeholder="Jari-jari Bola">
+        </div>
+      </div>
+
+      <button onclick="calculateCubeVolume()">Volume Kubus</button>
+      <button onclick="calculateSphereVolume()">Volume Bola</button>
+
+      <h2>Kalkulator Sains</h2>
+      <div class="row">
+        <button onclick="calculateSquareRoot()">√x</button>
+        <button onclick="calculatePower()">x^y</button>
+        <button onclick="calculateSin()">sin(x)</button>
+        <button onclick="calculateCos()">cos(x)</button>
+        <button onclick="calculateTan()">tan(x)</button>
+        <button onclick="calculateLog()">log(x)</button>
+        <button onclick="calculateLn()">ln(x)</button>
+      </div>
+
+      <p id="areaResult">Hasil Luas: </p>
+      <p id="areaDescription"></p> <!-- Deskripsi cara perhitungan luas -->
+
+      <p id="volumeResult">Hasil Volume: </p>
+      <p id="volumeDescription"></p> <!-- Deskripsi cara perhitungan volume -->
+
+      <p id="scienceResult">Hasil Kalkulator Sains: </p>
+      <p id="scienceDescription"></p> <!-- Deskripsi kalkulator sains -->
+    </div>
+
+    <footer>
+      <p>© 2025 Kalkulator Matematika</p>
+    </footer>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+
+    function appendNumber(number) {
+      if (display.value === "0") {
+        display.value = number;
+      } else {
+        display.value += number;
+      }
+    }
+
+    function appendOperator(operator) {
+      display.value += operator;
+    }
+
+    function appendDot() {
+      if (!display.value.includes(".")) {
+        display.value += ".";
+      }
+    }
+
+    function clearDisplay() {
+      display.value = "0";
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+      } catch (error) {
+        display.value = "Error";
+      }
+    }
+
+    function calculateArea() {
+      const length = parseFloat(document.getElementById("length").value);
+      const width = parseFloat(document.getElementById("width").value);
+      if (isNaN(length) || isNaN(width)) {
+        alert("Masukkan nilai panjang dan lebar!");
+      } else {
+        const area = length * width;
+        document.getElementById("areaResult").textContent = `Hasil Luas: ${area}`;
+        document.getElementById("areaDescription").textContent = `Luas = Panjang × Lebar = ${length} × ${width} = ${area}`;
+      }
+    }
+
+    function calculateCircleArea() {
+      const radius = parseFloat(document.getElementById("radius").value);
+      if (isNaN(radius)) {
+        alert("Masukkan nilai jari-jari!");
+      } else {
+        const area = Math.PI * radius * radius;
+        document.getElementById("areaResult").textContent = `Hasil Luas: ${area}`;
+        document.getElementById("areaDescription").textContent = `Luas = π × r² = ${Math.PI} × ${radius}² = ${area}`;
+      }
+    }
+
+    function calculateCubeVolume() {
+      const side = parseFloat(document.getElementById("cubeSide").value);
+      if (isNaN(side)) {
+        alert("Masukkan nilai sisi kubus!");
+      } else {
+        const volume = side ** 3;
+        document.getElementById("volumeResult").textContent = `Hasil Volume: ${volume}`;
+        document.getElementById("volumeDescription").textContent = `Volume = Sisi³ = ${side}³ = ${volume}`;
+      }
+    }
+
+    function calculateSphereVolume() {
+      const radius = parseFloat(document.getElementById("sphereRadius").value);
+      if (isNaN(radius)) {
+        alert("Masukkan nilai jari-jari bola!");
+      } else {
+        const volume = (4 / 3) * Math.PI * Math.pow(radius, 3);
+        document.getElementById("volumeResult").textContent = `Hasil Volume: ${volume}`;
+        document.getElementById("volumeDescription").textContent = `Volume = (4/3) × π × r³ = ${(4 / 3) * Math.PI} × ${radius}³ = ${volume}`;
+      }
+    }
+
+    // Kalkulator Sains
+    function calculateSquareRoot() {
+      const number = parseFloat(prompt("Masukkan angka:"));
+      const result = Math.sqrt(number);
+      document.getElementById("scienceResult").textContent = `Hasil √x: ${result}`;
+      document.getElementById("scienceDescription").textContent = `√${number} = ${result}`;
+    }
+
+    function calculatePower() {
+      const base = parseFloat(prompt("Masukkan angka dasar:"));
+      const exponent = parseFloat(prompt("Masukkan pangkat:"));
+      const result = Math.pow(base, exponent);
+      document.getElementById("scienceResult").textContent = `Hasil x^y: ${result}`;
+      document.getElementById("scienceDescription").textContent = `${base}^${exponent} = ${result}`;
+    }
+
+    function calculateSin() {
+      const angle = parseFloat(prompt("Masukkan sudut dalam derajat:"));
+      const radian = angle * (Math.PI / 180);
+      const result = Math.sin(radian);
+      document.getElementById("scienceResult").textContent = `Hasil sin: ${result}`;
+      document.getElementById("scienceDescription").textContent = `sin(${angle}°) = ${result}`;
+    }
+
+    function calculateCos() {
+      const angle = parseFloat(prompt("Masukkan sudut dalam derajat:"));
+      const radian = angle * (Math.PI / 180);
+      const result = Math.cos(radian);
+      document.getElementById("scienceResult").textContent = `Hasil cos: ${result}`;
+      document.getElementById("scienceDescription").textContent = `cos(${angle}°) = ${result}`;
+    }
+
+    function calculateTan() {
+      const angle = parseFloat(prompt("Masukkan sudut dalam derajat:"));
+      const radian = angle * (Math.PI / 180);
+      const result = Math.tan(radian);
+      document.getElementById("scienceResult").textContent = `Hasil tan: ${result}`;
+      document.getElementById("scienceDescription").textContent = `tan(${angle}°) = ${result}`;
+    }
+
+    function calculateLog() {
+      const number = parseFloat(prompt("Masukkan angka:"));
+      const result = Math.log10(number);
+      document.getElementById("scienceResult").textContent = `Hasil log: ${result}`;
+      document.getElementById("scienceDescription").textContent = `log(${number}) = ${result}`;
+    }
+
+    function calculateLn() {
+      const number = parseFloat(prompt("Masukkan angka:"));
+      const result = Math.log(number);
+      document.getElementById("scienceResult").textContent = `Hasil ln: ${result}`;
+      document.getElementById("scienceDescription").textContent = `ln(${number}) = ${result}`;
+    }
+  </script>
+</body>
+</html>
